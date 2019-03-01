@@ -2,14 +2,16 @@
 支持语义查询的扩展库, 基于jpa和querydsl
 
 上手很简单:
+maven dependencies: 
 ```
-// 依赖
 <dependency>
     <groupId>getouo</groupId>
     <artifactId>affix-querydsl-jpa</artifactId>
     <version>1.0-SNAPSHOT</version>
 </dependency>
-// 插件
+```
+插件: 将entity编译为QBean提供支持
+```
 <build>
     <plugins>
         ...
@@ -32,28 +34,31 @@
         ...
     </plugins>
 </build>
+```
 
-// 实体
+
+示例: 实体
+```
 @Entity
 @Table(name = "TABLE_NAME")
 public class Entity implements Domain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "aid")
-    public Long aid;
-    @Column(name = "username")
-    public Long username;
-    @Column(name = "phone")
-    public Long phone;
+    @Column(name = "aid")public Long aid;
+    @Column(name = "username") public Long username;
+    @Column(name = "phone") public Long phone;
     
     ...
-    field
     // getter and setter
 }
-// 库
+```
+扩展查询接口
+```
 public interface EntityJpa extends AffixQuerydslPredicateExecutor<Entity>, JpaRepository<Entity, Long>, JpaSpecificationExecutor<Entity>, Serializable {
 }
-
+```
+提供http访问服务
+```
 @RestController
 public class TestController {
     @Autowired
@@ -65,20 +70,33 @@ public class TestController {
     }
 
 }
+```
 
-mvn: compile
---> 启动项目访问
-// 
+执行 mvn: compile
+
+启动项目并 访问
+```
+(username like "haha")
+```
 http://host:port/path?username(like)=haha
-// 
+```
+(aid = 1) or (username like "haha")
+```
 http://host:port/path?[or]aid=1&[or]username(like)=haha
-// 
+```
+(phone like 139) and (username like "haha")
+```
 http://host:port/path?[or]phone(like)=139&username(like)=haha
+```
+((aid = 1) or (phone like 139)) and (username like "haha")
+```
+http://host:port/path?[or]aid=1&[or]phone(like)=139&username(like)=haha
 ...
 or POST: 一样的
 
 目前支持的查询方式:
 
+```
     类型	值		查询值数量	查询值类型	描述
     -------------------------------------------------------------------
     前缀	[OR]		不影响		不影响		指定条件以“或”连接
@@ -89,8 +107,8 @@ or POST: 一样的
     后缀	(BIT. NOTHAS)	不限		整形数值类型	位不存在值
     后缀	(NULL)		1个		Boolean		值是否为空
     后缀	默认不写		至少1个		字段同类型	相等于查询
-
-
 ```
+
+
 
 

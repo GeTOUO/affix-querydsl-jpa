@@ -4,9 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>getouo</groupId>
+    <groupId>io.github.getouo</groupId>
     <artifactId>affix-querydsl-jpa</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <!--<version>1.0-SNAPSHOT</version>-->
+    <version>1.0</version>
     <packaging>jar</packaging>
     <name>affix-querydsl-jpa</name>
     <description>support affix of querydsl-jpa.</description>
@@ -18,9 +19,9 @@
         </license>
     </licenses>
     <scm>
-        <connection>scm:git:git@github.com:GeTOUO/affix-querydsl-jpa.git</connection>
-        <developerConnection>scm:git:git@github.com:GeTOUO/affix-querydsl-jpa.git</developerConnection>
-        <url>git@github.com:GeTOUO/affix-querydsl-jpa.git</url>
+        <url>https://github.com/GeTOUO/affix-querydsl-jpa</url>
+        <connection>https://github.com/GeTOUO/affix-querydsl-jpa.git</connection>
+        <developerConnection>https://github.com/GeTOUO</developerConnection>
     </scm>
     <developers>
         <developer>
@@ -28,6 +29,16 @@
             <email>soliangsx@hotmail.com</email>
         </developer>
     </developers>
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <!--<repository>-->
+            <!--<id>ossge</id>-->
+            <!--<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>-->
+        <!--</repository>-->
+    </distributionManagement>
 
     <!--<parent>-->
         <!--<groupId>org.sonatype.oss</groupId>-->
@@ -41,12 +52,33 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <assertj.core.version>3.11.1</assertj.core.version>
+        <eclipse.lifecycle.mapping.version>1.0.0</eclipse.lifecycle.mapping.version>
         <java.version>1.8</java.version>
-        <!-- dependency version -->
+        <jmh.version>1.21</jmh.version>
+        <junit.version>4.13-beta-1</junit.version>
+        <maven.enforcer.version>3.0.0-M2</maven.enforcer.version>
+        <maven.build-helper.version>3.0.0</maven.build-helper.version>
+        <maven.bundle.version>4.1.0</maven.bundle.version>
+        <maven.clean.version>3.1.0</maven.clean.version>
+        <maven.install.version>3.0.0-M1</maven.install.version>
+        <maven.compiler.version>3.8.0</maven.compiler.version>
+        <maven.deploy.version>3.0.0-M1</maven.deploy.version>
+        <maven.gpg.version>1.6</maven.gpg.version>
+        <maven.jacoco.version>0.8.2</maven.jacoco.version>
+        <maven.jar.version>3.1.0</maven.jar.version>
+        <maven.javadoc.version>3.0.1</maven.javadoc.version>
+        <maven.release.version>2.5.3</maven.release.version>
+        <maven.versions.version>2.7</maven.versions.version>
+        <maven.surefire.version>3.0.0-M1</maven.surefire.version>
+        <maven.source.version>3.0.1</maven.source.version>
+        <maven.exec.version>1.5.0</maven.exec.version>
+        <scala.maven.version>3.4.4</scala.maven.version>
+        <scala.version>2.12.6</scala.version>
+        <scala.compat.version>2.12</scala.compat.version>
         <querydsl.version>4.1.4</querydsl.version>
         <vavr.version>0.9.3</vavr.version>
     </properties>
@@ -85,74 +117,148 @@
         </dependency>
     </dependencies>
 
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <!-- Source -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.0.1</version>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!-- Javadoc -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.0.1</version>
-                        <configuration>
-                            <show>private</show>
-                            <nohelp>true</nohelp>
-                            <charset>UTF-8</charset>
-                            <encoding>UTF-8</encoding>
-                            <docencoding>UTF-8</docencoding>
-                            <additionalparam>-Xdoclint:none</additionalparam>  <!-- TODO 临时解决不规范的javadoc生成报错,后面要规范化后把这行去掉 -->
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <!-- GPG -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <executions>
-                            <execution>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>oss</id>
-                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-                </snapshotRepository>
-                <repository>
-                    <id>oss</id>
-                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-                </repository>
-            </distributionManagement>
-        </profile>
-    </profiles>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <!--<build>-->
+        <!--<plugins>-->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-compiler-plugin</artifactId>-->
+                <!--<version>3.1</version>-->
+                <!--<configuration>-->
+                    <!--<source>1.8</source>-->
+                    <!--<target>1.8</target>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+        <!--</plugins>-->
+    <!--</build>-->
+
+    <!--<profiles>-->
+        <!--<profile>-->
+            <!--<id>release</id>-->
+            <!--<build>-->
+                <!--<plugins>-->
+                    <!--&lt;!&ndash; Source &ndash;&gt;-->
+                    <!--<plugin>-->
+                        <!--<groupId>org.apache.maven.plugins</groupId>-->
+                        <!--<artifactId>maven-source-plugin</artifactId>-->
+                        <!--<version>3.0.1</version>-->
+                        <!--<executions>-->
+                            <!--<execution>-->
+                                <!--<phase>package</phase>-->
+                                <!--<goals>-->
+                                    <!--<goal>jar-no-fork</goal>-->
+                                <!--</goals>-->
+                            <!--</execution>-->
+                        <!--</executions>-->
+                    <!--</plugin>-->
+                    <!--&lt;!&ndash; Javadoc &ndash;&gt;-->
+                    <!--<plugin>-->
+                        <!--<groupId>org.apache.maven.plugins</groupId>-->
+                        <!--<artifactId>maven-javadoc-plugin</artifactId>-->
+                        <!--<version>3.0.1</version>-->
+                        <!--<configuration>-->
+                            <!--<show>private</show>-->
+                            <!--<nohelp>true</nohelp>-->
+                            <!--<charset>UTF-8</charset>-->
+                            <!--<encoding>UTF-8</encoding>-->
+                            <!--<docencoding>UTF-8</docencoding>-->
+                            <!--<doclint>none</doclint>-->
+                            <!--&lt;!&ndash;<additionalparam>-Xdoclint:none</additionalparam>  &lt;!&ndash; TODO 临时解决不规范的javadoc生成报错,后面要规范化后把这行去掉 &ndash;&gt;&ndash;&gt;-->
+                        <!--</configuration>-->
+                        <!--<executions>-->
+                            <!--<execution>-->
+                                <!--<phase>package</phase>-->
+                                <!--<goals>-->
+                                    <!--<goal>jar</goal>-->
+                                <!--</goals>-->
+                            <!--</execution>-->
+                        <!--</executions>-->
+                    <!--</plugin>-->
+                    <!--&lt;!&ndash; GPG &ndash;&gt;-->
+                    <!--<plugin>-->
+                        <!--<groupId>org.apache.maven.plugins</groupId>-->
+                        <!--<artifactId>maven-gpg-plugin</artifactId>-->
+                        <!--<version>1.6</version>-->
+                        <!--<executions>-->
+                            <!--<execution>-->
+                                <!--<phase>verify</phase>-->
+                                <!--<goals>-->
+                                    <!--<goal>sign</goal>-->
+                                <!--</goals>-->
+                            <!--</execution>-->
+                        <!--</executions>-->
+                    <!--</plugin>-->
+                <!--</plugins>-->
+            <!--</build>-->
+        <!--</profile>-->
+    <!--</profiles>-->
 
 </project>
