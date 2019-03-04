@@ -5,9 +5,9 @@
 maven dependencies: 
 ```
 <dependency>
-    <groupId>getouo</groupId>
+    <groupId>io.github.getouo</groupId>
     <artifactId>affix-querydsl-jpa</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
 </dependency>
 ```
 插件: 将entity编译为QBean提供支持
@@ -74,21 +74,21 @@ public class TestController {
 
 执行 mvn: compile
 
-启动项目并 访问
+然后启动项目并 访问
 ```
-(username like "haha")
+条件: (username like "haha")
 ```
 http://host:port/path?username(like)=haha
 ```
-(aid = 1) or (username like "haha")
+条件: (aid = 1) or (username like "haha") :
 ```
 http://host:port/path?[or]aid=1&[or]username(like)=haha
 ```
-(phone like 139) and (username like "haha")
+条件: (phone like 139) and (username like "haha") :
 ```
 http://host:port/path?[or]phone(like)=139&username(like)=haha
 ```
-((aid = 1) or (phone like 139)) and (username like "haha")
+条件: ((aid = 1) or (phone like 139)) and (username like "haha") :
 ```
 http://host:port/path?[or]aid=1&[or]phone(like)=139&username(like)=haha
 ...
@@ -104,7 +104,7 @@ or POST: 一样的
     后缀	(LIKE)		不影响		字符串类型	模糊查询或包含
     后缀	(BETWEEN)	2个		整形数值类型	值介于之间
     后缀	(BIT.HAS)	不限		整形数值类型	位存在值
-    后缀	(BIT. NOTHAS)	不限		整形数值类型	位不存在值
+    后缀	(BIT.NOTHAS)	不限		整形数值类型	位不存在值
     后缀	(NULL)		1个		Boolean		值是否为空
     后缀	默认不写		至少1个		字段同类型	相等于查询
 ```
